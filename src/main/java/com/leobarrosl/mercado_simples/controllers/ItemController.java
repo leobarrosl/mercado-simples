@@ -4,13 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.leobarrosl.mercado_simples.models.entities.Item;
 import com.leobarrosl.mercado_simples.services.ItemService;
@@ -40,12 +34,12 @@ public class ItemController {
     }
 
     @PostMapping
-    public Item save(Item item) {
+    public Item save(@RequestBody Item item) {
         return itemService.save(item);
     }
 
     @PutMapping("/{id}")
-    public Item update(@PathVariable Long id, Item item) {
+    public Item update(@PathVariable Long id, @RequestBody Item item) {
         item.setId(id);
         return itemService.save(item);
     }

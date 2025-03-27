@@ -1,4 +1,4 @@
-package com.leobarrosl.mercado_simples.controllers;
+package com.leobarrosl.mercado_simples.handlers;
 
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +23,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value()
         );
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleNotFound(IllegalArgumentException ex) {
+        log.error("Erro: {}", ex.getMessage());
+        ErrorResponse error = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @Getter

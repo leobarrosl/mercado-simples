@@ -42,13 +42,15 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
+    public Double getTotalPrice() {
+        return items.stream()
+            .mapToDouble(item -> item.getSalePrice() * item.getQuantity())
+            .sum();
+    }
 
-    public void addItem(Item item, Integer quantity, Double salePrice) {
-        OrderItem orderItem = new OrderItem();
-        orderItem.setOrder(this);
-        orderItem.setItem(item);
-        orderItem.setQuantity(quantity);
-        orderItem.setSalePrice(salePrice);
-        items.add(orderItem);
+    public Order(LocalDateTime orderDate, OrderStatusEnum status, Customer customer) {
+        this.orderDate = orderDate;
+        this.status = status;
+        this.customer = customer;
     }
 }

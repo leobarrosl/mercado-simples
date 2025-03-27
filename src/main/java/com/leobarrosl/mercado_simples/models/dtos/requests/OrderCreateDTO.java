@@ -1,4 +1,4 @@
-package com.leobarrosl.mercado_simples.models.dtos;
+package com.leobarrosl.mercado_simples.models.dtos.requests;
 
 import java.util.List;
 
