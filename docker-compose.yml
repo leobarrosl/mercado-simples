@@ -1,0 +1,38 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mercado_mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: mercado
+      MARIADB_USER: leonardo
+      MARIADB_PASSWORD: admin
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "leonardo", "-padmin"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mercado_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/mercado
+      SPRING_DATASOURCE_USERNAME: leonardo
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+      SPRING_FLYWAY_ENABLED: "true"
+    depends_on:
+      - mariadb
+    entrypoint: ["/bin/sh", "-c", "./wait-for-it.sh mariadb:3306 --timeout=30 --strict -- java -jar app.jar"]
+
+volumes:
+  mariadb_data:
